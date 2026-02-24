@@ -59,7 +59,7 @@ export function getAllRecipes(): RecipeMeta[] {
             keywords: data.keywords || '',
             category: data.category || '',
             cuisine: data.cuisine || '',
-            author: data.author || 'Zest & Basil',
+            author: data.author || 'ehesart',
             slug,
             image: `/recipes/${slug}.jpg`,
             extraImage: hasExtraImage ? `/recipes/${slug}-cooking.jpg` : null,
