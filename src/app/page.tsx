@@ -1,67 +1,88 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Utensils, Zap, Leaf, ArrowRight, Instagram, Facebook, Twitter } from "lucide-react";
+import { Utensils, Zap, Leaf, ArrowRight, Instagram, Facebook, Twitter, Clock, Users, ChefHat } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
-const recipes = [
-  {
-    title: "Honey Garlic Shrimp",
-    tagline: "High Protein & Juicy",
-    image: "/images/shrimp.jpg",
-    color: "bg-zest",
-  },
-  {
-    title: "Banana Crunch Cheesecake",
-    tagline: "Creamy & Decadent",
-    image: "/images/cheesecake.jpg",
-    color: "bg-orange-400",
-  },
-  {
-    title: "Texas Roadhouse Salmon",
-    tagline: "Glazed to Perfection",
-    image: "/images/salmon.jpg",
-    color: "bg-red-400",
-  },
+interface RecipeMeta {
+  title: string;
+  slug: string;
+  image: string;
+  description: string;
+  tags: string[];
+  totalTime: string;
+  servings: string;
+  calories: string;
+  difficulty: string;
+  category: string;
+}
+
+const heroImages = [
+  "/images/shrimp.jpg",
+  "/images/cheesecake.jpg",
+  "/images/salmon.jpg",
 ];
 
 export default function Home() {
+  const [recipes, setRecipes] = useState<RecipeMeta[]>([]);
+  const [heroIdx, setHeroIdx] = useState(0);
+
+  useEffect(() => {
+    fetch("/api/recipes")
+      .then(r => r.json())
+      .then((data) => setRecipes(data.recipes || []))
+      .catch(() => { });
+  }, []);
+
+  // Auto-rotate hero background
+  useEffect(() => {
+    const timer = setInterval(() => setHeroIdx(p => (p + 1) % heroImages.length), 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const featuredRecipes = recipes.slice(0, 6);
+  const latestRecipes = recipes.slice(0, 3);
+
   return (
     <main className="min-h-screen bg-cream text-charcoal selection:bg-zest selection:text-charcoal">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 flex justify-between items-center px-8 py-6 glass">
-        <div className="flex items-center gap-2">
+      <nav className="fixed top-0 w-full z-50 flex justify-between items-center px-8 py-5 glass">
+        <Link href="/" className="flex items-center gap-2">
           <div className="w-10 h-10 bg-basil rounded-full flex items-center justify-center text-zest">
             <Leaf size={24} />
           </div>
           <span className="text-2xl font-serif font-bold tracking-tight">Zest & Basil</span>
-        </div>
+        </Link>
         <div className="hidden md:flex gap-8 font-medium">
+          <Link href="/" className="text-basil font-bold">Home</Link>
           <Link href="/recipes" className="hover:text-basil transition-colors">Recipes</Link>
-          <Link href="#" className="hover:text-basil transition-colors">Categories</Link>
-          <Link href="#" className="hover:text-basil transition-colors">About</Link>
+          <Link href="/recipes" className="hover:text-basil transition-colors">Categories</Link>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="/login" className="font-bold text-charcoal/60 hover:text-charcoal transition-colors">
+          <Link href="/login" className="font-bold text-charcoal/60 hover:text-charcoal transition-colors hidden sm:block">
             Login
           </Link>
-          <button className="bg-basil text-cream px-6 py-2 rounded-full font-bold hover:bg-basil-light transition-all shadow-lg hover:shadow-basil/20 text-sm md:text-base">
-            Subscribe
-          </button>
+          <Link href="/recipes" className="bg-basil text-cream px-6 py-2 rounded-full font-bold hover:bg-basil-light transition-all shadow-lg hover:shadow-basil/20 text-sm md:text-base">
+            Browse Recipes
+          </Link>
         </div>
       </nav>
 
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/shrimp.jpg"
-            alt="Hero Background"
-            fill
-            className="object-cover brightness-[0.4]"
-            priority
-          />
+          {heroImages.map((img, i) => (
+            <Image
+              key={i}
+              src={img}
+              alt="Hero Background"
+              fill
+              className={`object-cover brightness-[0.35] transition-opacity duration-1000 ${i === heroIdx ? 'opacity-100' : 'opacity-0'}`}
+              priority={i === 0}
+            />
+          ))}
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl">
@@ -84,9 +105,9 @@ export default function Home() {
               <Link href="/recipes" className="bg-zest text-charcoal px-10 py-4 rounded-full font-bold text-lg hover:bg-zest-dark transition-all flex items-center justify-center gap-2 group">
                 Explore Recipes <ArrowRight className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <button className="bg-transparent border-2 border-cream text-cream px-10 py-4 rounded-full font-bold text-lg hover:bg-cream hover:text-charcoal transition-all">
-                Our Story
-              </button>
+              <Link href="/recipes" className="bg-transparent border-2 border-cream text-cream px-10 py-4 rounded-full font-bold text-lg hover:bg-cream hover:text-charcoal transition-all">
+                View All
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -101,7 +122,7 @@ export default function Home() {
             <Utensils size={24} />
           </div>
           <div>
-            <p className="text-sm font-bold">500+ Recipes</p>
+            <p className="text-sm font-bold">{recipes.length || '500+'}  Recipes</p>
             <p className="text-xs opacity-60">Hand-picked selection</p>
           </div>
         </motion.div>
@@ -121,11 +142,11 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Featured section */}
+      {/* Featured / Latest Recipes (dynamic from API) */}
       <section className="py-24 px-8 max-w-7xl mx-auto">
         <div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">Featured Delights</h2>
+            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">Latest Recipes</h2>
             <div className="w-24 h-1 bg-zest rounded-full"></div>
           </div>
           <Link href="/recipes" className="text-basil font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
@@ -133,47 +154,111 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {recipes.map((recipe, idx) => (
-            <motion.div
-              key={idx}
-              whileHover={{ y: -15 }}
-              className="group relative h-[500px] rounded-[40px] overflow-hidden shadow-2xl"
-            >
-              <Image
-                src={recipe.image}
-                alt={recipe.title}
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+        {latestRecipes.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {latestRecipes.map((recipe, idx) => (
+              <Link key={idx} href={`/recipes/${recipe.slug}`}>
+                <motion.div
+                  whileHover={{ y: -15 }}
+                  className="group relative h-[500px] rounded-[40px] overflow-hidden shadow-2xl cursor-pointer"
+                >
+                  <Image
+                    src={recipe.image}
+                    alt={recipe.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
 
-              <div className="absolute bottom-0 p-10 w-full text-cream">
-                <span className={`inline-block ${recipe.color} text-charcoal px-3 py-1 rounded-full text-xs font-bold mb-4 uppercase tracking-tighter`}>
-                  {recipe.tagline}
-                </span>
-                <h3 className="text-3xl font-serif font-bold mb-4 leading-tight">{recipe.title}</h3>
-                <div className="overflow-hidden h-0 group-hover:h-12 transition-all duration-300">
-                  <button className="flex items-center gap-2 text-zest font-bold">
-                    Learn To Cook <ArrowRight size={18} />
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                  <div className="absolute bottom-0 p-10 w-full text-cream">
+                    {recipe.tags && recipe.tags.length > 0 && (
+                      <div className="flex gap-2 mb-3">
+                        {recipe.tags.slice(0, 2).map((tag: string, ti: number) => (
+                          <span key={ti} className="bg-zest text-charcoal px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <h3 className="text-3xl font-serif font-bold mb-3 leading-tight">{recipe.title}</h3>
+                    <div className="flex items-center gap-4 text-xs font-medium text-cream/60 mb-3">
+                      {recipe.totalTime && <span className="flex items-center gap-1"><Clock size={12} /> {recipe.totalTime}</span>}
+                      {recipe.difficulty && <span className="flex items-center gap-1"><ChefHat size={12} /> {recipe.difficulty}</span>}
+                    </div>
+                    <div className="overflow-hidden h-0 group-hover:h-12 transition-all duration-300">
+                      <span className="flex items-center gap-2 text-zest font-bold">
+                        Read Recipe <ArrowRight size={18} />
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          /* Fallback static cards */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {[
+              { title: "Honey Garlic Shrimp", tagline: "High Protein", image: "/images/shrimp.jpg", color: "bg-zest" },
+              { title: "Banana Crunch Cheesecake", tagline: "Creamy & Decadent", image: "/images/cheesecake.jpg", color: "bg-orange-400" },
+              { title: "Texas Roadhouse Salmon", tagline: "Glazed to Perfection", image: "/images/salmon.jpg", color: "bg-red-400" },
+            ].map((r, idx) => (
+              <Link key={idx} href="/recipes">
+                <motion.div
+                  whileHover={{ y: -15 }}
+                  className="group relative h-[500px] rounded-[40px] overflow-hidden shadow-2xl cursor-pointer"
+                >
+                  <Image
+                    src={r.image}
+                    alt={r.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+
+                  <div className="absolute bottom-0 p-10 w-full text-cream">
+                    <span className={`inline-block ${r.color} text-charcoal px-3 py-1 rounded-full text-xs font-bold mb-4 uppercase tracking-tighter`}>
+                      {r.tagline}
+                    </span>
+                    <h3 className="text-3xl font-serif font-bold mb-4 leading-tight">{r.title}</h3>
+                    <div className="overflow-hidden h-0 group-hover:h-12 transition-all duration-300">
+                      <span className="flex items-center gap-2 text-zest font-bold">
+                        View Recipes <ArrowRight size={18} />
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
+
+      {/* Browse All Recipes CTA */}
+      {recipes.length > 3 && (
+        <section className="py-16 px-8 text-center">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl font-serif font-bold mb-4">Discover More Recipes</h2>
+            <p className="text-charcoal/50 mb-8">
+              We have {recipes.length} delicious recipes waiting for you. From quick weeknight dinners to impressive desserts.
+            </p>
+            <Link href="/recipes" className="inline-flex items-center gap-2 bg-basil text-cream px-10 py-4 rounded-full font-bold text-lg hover:bg-basil-light transition-all shadow-xl group">
+              Browse All {recipes.length} Recipes <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="bg-charcoal text-cream py-20 px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-2 mb-8">
+            <Link href="/" className="flex items-center gap-2 mb-8">
               <div className="w-10 h-10 bg-zest rounded-full flex items-center justify-center text-charcoal">
                 <Leaf size={24} />
               </div>
               <span className="text-3xl font-serif font-bold tracking-tight">Zest & Basil</span>
-            </div>
+            </Link>
             <p className="text-cream/60 max-w-sm mb-8 leading-relaxed">
               We believe that cooking is an art form that brings people together.
               Our mission is to inspire you to create beautiful, delicious meals every single day.
@@ -194,10 +279,11 @@ export default function Home() {
           <div>
             <h4 className="font-bold mb-8 text-xl text-zest">Quick Links</h4>
             <ul className="space-y-4 text-cream/60">
-              <li className="hover:text-cream cursor-pointer">Privacy Policy</li>
-              <li className="hover:text-cream cursor-pointer">Terms of Service</li>
-              <li className="hover:text-cream cursor-pointer">Cookie Policy</li>
-              <li className="hover:text-cream cursor-pointer">Accessibility</li>
+              <li><Link href="/" className="hover:text-cream transition-colors">Home</Link></li>
+              <li><Link href="/recipes" className="hover:text-cream transition-colors">All Recipes</Link></li>
+              <li><Link href="/login" className="hover:text-cream transition-colors">Admin Login</Link></li>
+              <li><Link href="#" className="hover:text-cream transition-colors">Privacy Policy</Link></li>
+              <li><Link href="#" className="hover:text-cream transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
 
@@ -217,7 +303,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-cream/10 flex flex-col md:row justify-between items-center gap-4 text-cream/40 text-xs">
+        <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-cream/10 flex flex-col md:flex-row justify-between items-center gap-4 text-cream/40 text-xs">
           <p>© 2026 Zest & Basil Recipes. All rights reserved.</p>
           <p>Handcrafted with passion for the culinary arts.</p>
         </div>

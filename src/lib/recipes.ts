@@ -15,8 +15,13 @@ export interface RecipeMeta {
     calories: string;
     difficulty: string;
     tags: string[];
+    keywords: string;
+    category: string;
+    cuisine: string;
+    author: string;
     slug: string;
     image: string;
+    extraImage: string | null;
 }
 
 export interface Recipe extends RecipeMeta {
@@ -36,6 +41,10 @@ export function getAllRecipes(): RecipeMeta[] {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const { data } = matter(fileContent);
 
+        // Check if extra cooking image exists
+        const extraImagePath = path.join(process.cwd(), 'public', 'recipes', `${slug}-cooking.jpg`);
+        const hasExtraImage = fs.existsSync(extraImagePath);
+
         return {
             title: data.title || slug,
             date: data.date || '',
@@ -47,8 +56,13 @@ export function getAllRecipes(): RecipeMeta[] {
             calories: data.calories || '',
             difficulty: data.difficulty || 'Easy',
             tags: data.tags || [],
+            keywords: data.keywords || '',
+            category: data.category || '',
+            cuisine: data.cuisine || '',
+            author: data.author || 'Zest & Basil',
             slug,
             image: `/recipes/${slug}.jpg`,
+            extraImage: hasExtraImage ? `/recipes/${slug}-cooking.jpg` : null,
         } as RecipeMeta;
     });
 
@@ -67,6 +81,9 @@ export function getRecipeBySlug(slug: string): Recipe | null {
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const { data, content } = matter(fileContent);
 
+    const extraImagePath = path.join(process.cwd(), 'public', 'recipes', `${slug}-cooking.jpg`);
+    const hasExtraImage = fs.existsSync(extraImagePath);
+
     return {
         title: data.title || slug,
         date: data.date || '',
@@ -78,8 +95,13 @@ export function getRecipeBySlug(slug: string): Recipe | null {
         calories: data.calories || '',
         difficulty: data.difficulty || 'Easy',
         tags: data.tags || [],
+        keywords: data.keywords || '',
+        category: data.category || '',
+        cuisine: data.cuisine || '',
+        author: data.author || 'Zest & Basil',
         slug,
         image: `/recipes/${slug}.jpg`,
+        extraImage: hasExtraImage ? `/recipes/${slug}-cooking.jpg` : null,
         content,
     };
 }

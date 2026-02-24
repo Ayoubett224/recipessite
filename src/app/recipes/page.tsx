@@ -1,9 +1,14 @@
 import { getAllRecipes } from "@/lib/recipes";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, Users, Flame, ArrowRight, Leaf } from "lucide-react";
+import { Clock, Users, Flame, ArrowRight, Leaf, ArrowLeft, ChefHat } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+export const metadata = {
+    title: "All Recipes | Zest & Basil",
+    description: "Browse our entire collection of handcrafted recipes. Easy weeknight dinners, decadent desserts, and everything in between.",
+};
 
 export default function RecipesPage() {
     const recipes = getAllRecipes();
@@ -20,9 +25,14 @@ export default function RecipesPage() {
                         <span className="text-2xl font-serif font-bold tracking-tight">Zest & Basil</span>
                     </Link>
                     <div className="hidden md:flex gap-8 font-medium">
+                        <Link href="/" className="hover:text-[#2D5A27] transition-colors">Home</Link>
                         <Link href="/recipes" className="text-[#2D5A27] font-bold">Recipes</Link>
-                        <Link href="#" className="hover:text-[#2D5A27] transition-colors">Categories</Link>
-                        <Link href="#" className="hover:text-[#2D5A27] transition-colors">About</Link>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <Link href="/login" className="font-bold text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors hidden sm:block">Login</Link>
+                        <Link href="/" className="bg-[#2D5A27] text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-[#4A7C44] transition-all">
+                            Home
+                        </Link>
                     </div>
                 </div>
             </nav>
@@ -30,14 +40,14 @@ export default function RecipesPage() {
             {/* Hero */}
             <section className="pt-32 pb-16 px-8 max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                    <span className="inline-block bg-[#FADA5E] text-[#1A1A1A] px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
-                        Our Collection
-                    </span>
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-[#2D5A27] font-bold mb-6 hover:underline">
+                        <ArrowLeft size={14} /> Back to Home
+                    </Link>
                     <h1 className="text-5xl md:text-7xl font-serif font-bold text-[#1A1A1A] mb-6">
                         All <span className="text-[#2D5A27] italic">Recipes</span>
                     </h1>
                     <p className="text-xl text-[#1A1A1A]/50 max-w-2xl mx-auto">
-                        Browse our handcrafted collection of recipes, each one tested and perfected in our kitchen.
+                        Browse our handcrafted collection of {recipes.length} recipes, each one tested and perfected in our kitchen.
                     </p>
                 </div>
             </section>
@@ -62,7 +72,7 @@ export default function RecipesPage() {
                         {recipes.map((recipe, idx) => (
                             <Link key={idx} href={`/recipes/${recipe.slug}`}>
                                 <article className="group cursor-pointer">
-                                    <div className="relative h-[400px] rounded-[32px] overflow-hidden shadow-xl mb-6">
+                                    <div className="relative h-[320px] rounded-[28px] overflow-hidden shadow-xl mb-5">
                                         <Image
                                             src={recipe.image}
                                             alt={recipe.title}
@@ -71,13 +81,16 @@ export default function RecipesPage() {
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         {recipe.difficulty && (
-                                            <span className="absolute top-5 right-5 bg-[#FADA5E] text-[#1A1A1A] px-3 py-1 rounded-full text-xs font-bold uppercase">
+                                            <span className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold uppercase ${recipe.difficulty === 'Easy' ? 'bg-emerald-400 text-white' :
+                                                    recipe.difficulty === 'Medium' ? 'bg-amber-400 text-white' :
+                                                        'bg-red-400 text-white'
+                                                }`}>
                                                 {recipe.difficulty}
                                             </span>
                                         )}
-                                        <div className="absolute bottom-5 left-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span className="inline-flex items-center gap-2 bg-white text-[#1A1A1A] px-5 py-2.5 rounded-full font-bold text-sm">
-                                                View Recipe <ArrowRight size={16} />
+                                        <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <span className="inline-flex items-center gap-2 bg-white text-[#1A1A1A] px-5 py-2.5 rounded-full font-bold text-sm shadow-lg">
+                                                Read Recipe <ArrowRight size={16} />
                                             </span>
                                         </div>
                                     </div>
@@ -92,7 +105,7 @@ export default function RecipesPage() {
                                                 ))}
                                             </div>
                                         )}
-                                        <h3 className="text-2xl font-serif font-bold text-[#1A1A1A] mb-3 group-hover:text-[#2D5A27] transition-colors leading-tight">
+                                        <h3 className="text-xl font-serif font-bold text-[#1A1A1A] mb-2 group-hover:text-[#2D5A27] transition-colors leading-tight">
                                             {recipe.title}
                                         </h3>
                                         <p className="text-sm text-[#1A1A1A]/50 mb-4 line-clamp-2">{recipe.description}</p>
@@ -114,6 +127,24 @@ export default function RecipesPage() {
                     </div>
                 )}
             </section>
+
+            {/* Footer */}
+            <footer className="bg-[#1A1A1A] text-white py-12 px-8">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                    <Link href="/" className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-[#FADA5E] rounded-lg flex items-center justify-center text-[#1A1A1A]">
+                            <Leaf size={18} />
+                        </div>
+                        <span className="text-lg font-serif font-bold">Zest & Basil</span>
+                    </Link>
+                    <div className="flex gap-6 text-sm text-white/40">
+                        <Link href="/" className="hover:text-white transition-colors">Home</Link>
+                        <Link href="/recipes" className="hover:text-white transition-colors">Recipes</Link>
+                        <Link href="/login" className="hover:text-white transition-colors">Admin</Link>
+                    </div>
+                    <p className="text-white/20 text-xs">© 2026 Zest & Basil</p>
+                </div>
+            </footer>
         </main>
     );
 }
