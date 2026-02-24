@@ -1,34 +1,54 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
+const playfair = Playfair_Display({
+    subsets: ["latin"],
+    variable: "--font-serif",
+    display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-serif",
-  subsets: ["latin"],
+const inter = Inter({
+    subsets: ["latin"],
+    variable: "--font-sans",
+    display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Zest & Basil | Premium Recipes",
-  description: "Discover handcrafted recipes with a zest of passion and a touch of basil.",
+    title: "ehesart — Delicious Recipes & Cooking Ideas",
+    description:
+        "Discover mouthwatering recipes, cooking tips, and meal inspiration. From quick weeknight dinners to gourmet desserts — ehesart has it all.",
+    keywords: [
+        "recipes",
+        "cooking",
+        "food blog",
+        "dinner ideas",
+        "healthy meals",
+        "easy recipes",
+        "desserts",
+        "meal prep",
+        "ehesart",
+    ],
+    authors: [{ name: "ehesart" }],
+    openGraph: {
+        type: "website",
+        siteName: "ehesart",
+        title: "ehesart — Delicious Recipes & Cooking Ideas",
+        description:
+            "Discover mouthwatering recipes, cooking tips, and meal inspiration.",
+    },
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} ${playfair.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body className={`${playfair.variable} ${inter.variable} antialiased`}>
+                {children}
+            </body>
+        </html>
+    );
 }
