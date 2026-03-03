@@ -79,12 +79,11 @@ function parseTable(content: string): { nutrient: string; amount: string }[] {
         .filter(r => r.nutrient);
 }
 
-/* ── Ad Slot Component ────────────────────── */
-function AdSlot({ id, className = "" }: { id: string; className?: string }) {
+/* ── HB Agency Ad Slot Component ────────────────────── */
+function AdSlot({ placementId, className = "" }: { placementId: string; className?: string }) {
     return (
         <div className={`text-center ${className}`}>
-            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#1A1A1A]/15 mb-1">Advertisement</p>
-            <div id={`ad-${id}`} className="min-h-[250px] flex items-center justify-center" />
+            <div id={`hbagency_space_${placementId}`} className="min-h-[50px]" />
         </div>
     );
 }
@@ -223,7 +222,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
                     )}
 
                     {/* ── AD: After Tags ── */}
-                    <AdSlot id="after-hero" className="mb-8" />
+                    <AdSlot placementId="301494" className="mb-8" />
 
                     {/* ── Intro ── */}
                     <section id="intro" className="mb-10">
@@ -281,7 +280,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
                     )}
 
                     {/* ── AD: Before Instructions ── */}
-                    <AdSlot id="before-instructions" className="mb-10" />
+                    <AdSlot placementId="301493" className="mb-10" />
 
                     {/* ── Instructions ── */}
                     {instructions.length > 0 && (
@@ -326,7 +325,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
                     )}
 
                     {/* ── AD: After Tips ── */}
-                    <AdSlot id="after-tips" className="mb-10" />
+                    <AdSlot placementId="301494" className="mb-10" />
 
                     {/* ── Storage ── */}
                     {storage && (
@@ -383,7 +382,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
                     <div className="lg:sticky lg:top-[70px] space-y-6">
 
                         {/* ── AD: Sidebar Top ── */}
-                        <AdSlot id="sidebar-top" />
+                        <AdSlot placementId="301491" />
 
                         {/* ── Quick Info Card ── */}
                         <div className="bg-[#f8faf6] rounded-2xl p-6">
@@ -412,7 +411,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
                         </div>
 
                         {/* ── AD: Sidebar Bottom ── */}
-                        <AdSlot id="sidebar-bottom" />
+                        <AdSlot placementId="301493" />
 
                         {/* ── Newsletter ── */}
                         <div className="bg-[#E87722]/10 rounded-2xl p-6 border border-[#E87722]/15">
@@ -457,7 +456,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
 
             {/* ── AD: Before Footer ── */}
             <div className="max-w-4xl mx-auto px-5 pb-8">
-                <AdSlot id="before-footer" />
+                <AdSlot placementId="301490" />
             </div>
 
             {/* ─── Footer ─── */}
