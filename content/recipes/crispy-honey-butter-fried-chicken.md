@@ -1,5 +1,5 @@
 ---
-title:"Crispy Honey Butter Fried Chicken"
+title: "Crispy Honey Butter Fried Chicken"
 date: "2026-02-24"
 description: "Crispy Honey Butter Fried Chicken - The ultimate crispy, golden-brown chicken coated in a sweet and savory honey butter glaze. Perfect for a crowd!"
 prepTime: "30 minutes"
@@ -73,6 +73,6 @@ Store leftover Crispy Honey Butter Fried Chicken in an airtight container in the
 | Fat | 18g |
 | Fiber | 1g |
 
-*This recipe was crafted with love by the ehesart kitchen. Tag us on Pinterest if you make it!*
+---
 
-*This Crispy Honey Butter Fried Chicken recipe is your ticket to crispy, juicy, honey-glazed perfection. Give it a try tonight!*
+*This recipe was crafted with love by the ehesart kitchen. Tag us on Pinterest if you make it!*

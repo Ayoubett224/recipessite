@@ -3,15 +3,18 @@ title: "No-Bake Chocolate Oat Bars: Healthy & Sweet"
 date: "2026-02-27"  
 description: "Discover our No-Bake Chocolate Oat Bars: Healthy & Sweet. Perfect for quick, wholesome treats!"  
 prepTime: "15 minutes"  
-cookTime: "25 minutes"  
-totalTime: "40 minutes"  
+cookTime: "0 minutes"  
+totalTime: "15 minutes"  
 servings: "4"  
 calories: "380"  
 difficulty: "Easy"  
-tags: "Delicious, Healthy, Quick, Fresh, Easy"  
-keywords: "healthy recipes, easy dinner recipes, quick chicken recipes, garlic chicken thighs, weeknight dinner ideas"  
+tags: ["Delicious", "Healthy", "Quick", "Fresh", "Easy"]  
+keywords: "healthy recipes, easy dessert recipes, no bake bars, chocolate oat bars, healthy snack ideas"  
 category: "Dessert"  
-author: "ehesart"  
+cuisine: "American"
+author: "ehesart"
+---
+  
 
 ## Why You'll Love This Recipe  
 This No-Bake Chocolate Oat Bars blend creaminess with crunch effortlessly, offering a perfect balance that delights every palate. Their minimalist prep makes them ideal for those craving comfort without compromising nutrition. Crafted with care, each bar delivers a satisfying finish while keeping calories low. A versatile option for any meal, this recipe shines as a standalone treat or paired with coffee. It’s a testament to simplicity that elevates indulgence effortlessly.  

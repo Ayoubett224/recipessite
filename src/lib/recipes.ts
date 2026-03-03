@@ -4,6 +4,14 @@ import matter from 'gray-matter';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'recipes');
 
+// Normalize tags: some markdown files have tags as a comma-separated string
+// instead of a YAML array, which causes .map() crashes on the frontend
+function normalizeTags(tags: unknown): string[] {
+    if (Array.isArray(tags)) return tags.map(t => String(t).trim()).filter(Boolean);
+    if (typeof tags === 'string' && tags.trim()) return tags.split(',').map(t => t.trim()).filter(Boolean);
+    return [];
+}
+
 export interface RecipeMeta {
     title: string;
     date: string;
@@ -55,7 +63,7 @@ export function getAllRecipes(): RecipeMeta[] {
             servings: data.servings || '',
             calories: data.calories || '',
             difficulty: data.difficulty || 'Easy',
-            tags: data.tags || [],
+            tags: normalizeTags(data.tags),
             keywords: data.keywords || '',
             category: data.category || '',
             cuisine: data.cuisine || '',
@@ -94,11 +102,11 @@ export function getRecipeBySlug(slug: string): Recipe | null {
         servings: data.servings || '',
         calories: data.calories || '',
         difficulty: data.difficulty || 'Easy',
-        tags: data.tags || [],
+        tags: normalizeTags(data.tags),
         keywords: data.keywords || '',
         category: data.category || '',
         cuisine: data.cuisine || '',
-        author: data.author || 'Zest & Basil',
+        author: data.author || 'ehesart',
         slug,
         image: `/recipes/${slug}.jpg`,
         extraImage: hasExtraImage ? `/recipes/${slug}-cooking.jpg` : null,

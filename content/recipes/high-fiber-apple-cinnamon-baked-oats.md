@@ -8,7 +8,7 @@ totalTime: "50 minutes"
 servings: "4"
 calories: "380"
 difficulty: "Easy"
-tags: "breakfast, oats, apple, cinnamon, healthy, easy breakfast"
+tags: ["breakfast", "oats", "apple", "cinnamon", "healthy", "easy breakfast"]
 keywords: "high-fiber breakfast, baked oats recipe, healthy breakfast ideas, easy breakfast recipes, apple cinnamon oats, overnight oats, quick breakfast, breakfast for busy mornings, fiber rich breakfast, healthy morning meal"
 category: "Breakfast"
 cuisine: "American"
