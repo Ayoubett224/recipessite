@@ -82,14 +82,13 @@ function parseTable(content: string): { nutrient: string; amount: string }[] {
 /* ── Ad Slot Component ────────────────────── */
 function AdSlot({ id, className = "" }: { id: string; className?: string }) {
     return (
-        <div id={`ad-${id}`} className={`bg-[#FFF8F0] border-2 border-dashed border-[#E87722]/10 rounded-2xl p-4 text-center ${className}`}>
+        <div className={`text-center ${className}`}>
             <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#1A1A1A]/15 mb-1">Advertisement</p>
-            <div className="h-[250px] flex items-center justify-center">
-                <p className="font-bold text-[#1A1A1A]/8 text-xs">Ad Space · {id}</p>
-            </div>
+            <div id={`ad-${id}`} className="min-h-[250px] flex items-center justify-center" />
         </div>
     );
 }
+
 
 /* ── Main Page ────────────────────── */
 export default async function RecipePage({ params }: { params: Promise<{ slug: string }> }) {
